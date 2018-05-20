@@ -34,11 +34,21 @@ def create
 end
 
 def edit
-  @task =Task.find(params[:id])
+#  @task =Task.find(params[:id])
+  @task=current_user.tasks.find_by(id: params[:id])
+  unless @task
+    flash[:danger]="そのタスクにはアクセスできません"
+    redirect_to tasks_path
+  end
 end
 
 def update
-  @task= Task.find(params[:id])
+#  @task= Task.find(params[:id])
+  @task=current_user.tasks.find_by(id: params[:id])
+  unless @task
+    flash[:danger]="そのタスクにはアクセスできません"
+    redirect_to tasks_path
+  end
   if @task.update(task_params)
     flash[:success]="更新成功"
     #redirect_to task_path(@task)
@@ -50,7 +60,12 @@ def update
 end
 
 def destroy
-  @task=Task.find(params[:id])
+#  @task=Task.find(params[:id])
+  @task=current_user.tasks.find_by(id: params[:id])
+  unless @task
+    flash[:danger]="そのタスクにはアクセスできません"
+    redirect_to tasks_path
+  end
   @task.destroy
   
   flash[:success] ="削除しました"
