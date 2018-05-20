@@ -8,6 +8,8 @@ class UsersController < ApplicationController
 
   def show
     @user = User.find(params[:id])
+    @tasks = @user.tasks.order('created_at DESC').page(params[:page])
+    counts(@user)
   end
 
   def new
@@ -18,7 +20,9 @@ class UsersController < ApplicationController
     @user = User.new(user_params)
     if @user.save
      flash[:success]="ユーザー登録"
-     redirect_to @user
+     session[:user_id]=@user.id
+     redirect_to root_url
+#     redirect_to @user
     else
       flash[:danger]="ユーザー登録失敗"
       render :new      
