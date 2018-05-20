@@ -7,7 +7,12 @@ def index
 end
 
 def show
-  @task=Task.find(params[:id])
+#  @task=Task.find(params[:id])
+  @task=current_user.tasks.find_by(id: params[:id])
+  unless @task
+    flash[:danger]="そのタスクにはアクセスできません"
+    redirect_to tasks_path
+  end
 end
 
 def new
